@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid navbar-right">
+            <div class="navbar-header">
+                <p class="navbar-text"><a href="{{ url }}">
+                {% if url_linktext == "Sign Out" %} 
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                {% endif %}
+                {{ url_linktext }}</a></p>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <a class="btn btn-primary btn-lg" href="/getname" role="button">Get Phantom name</a>
+        <table class="table table-condensed">
+            <tr>
+                <th>Ghostname</th>
+                <th>Created By</th>
+                <th>Taken</th>
+            </tr>
+            {% for g in ghostnames %}
+            <tr>
+                <td> {{ g.ghostname }} </td>
+                <td> {{ g.creator }}</td>
+                {% if g.taken_by %}
+                <td>yes</td>
+                {% else %}
+                <td>no</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
