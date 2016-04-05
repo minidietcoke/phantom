@@ -29,6 +29,7 @@ class Ghostname(db.Model):
     ghostname = db.StringProperty(multiline=True)
     creator = db.StringProperty()
     taken_by = db.StringProperty()
+    is_taken = db.BooleanProperty(default=False)
 
 
 class User(db.Model):
@@ -101,8 +102,7 @@ class MainPage(webapp2.RequestHandler):
 
         addInitialNames()
 
-        ghostnames = db.GqlQuery(
-            "SELECT * FROM Ghostname ORDER BY ghostname ASC")
+        ghostnames = Ghostname.all()
 
         template_values = {
             'ghostnames': ghostnames,
@@ -130,6 +130,23 @@ class Get_name(webapp2.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'getname.html')
         self.response.out.write(template.render(path, template_values))
 
+    # def post(self):
+    #     if users.get_current_user():
+    #         url = users.create_logout_url(self.request.uri)
+    #         url_linktext = 'Sign Out'
+    #     else:
+    #         url = users.create_login_url(self.request.uri)
+    #         url_linktext = 'Login'
+
+    #     template_values = {
+    #         'url': url,
+    #         'url_linktext': url_linktext,
+    #     }
+    #     path = os.path.join(os.path.dirname(__file__), 'results.html')
+    #     self.response.out.write(template.render(path, template_values))
+
+
+class Results(webapp2.RequestHandler):
     def post(self):
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
@@ -138,27 +155,19 @@ class Get_name(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
 
-        template_values = {
-            'url': url,
-            'url_linktext': url_linktext,
-        }
-        path = os.path.join(os.path.dirname(__file__), 'results.html')
-        self.response.out.write(template.render(path, template_values))
+        ghostnames = Ghostname.all()
+        ghostnames = ghostnames.filter("is_taken =", False)
+        ghostnames = ghostnames.run(limit=3)
 
-
-class Results(webapp2.RequestHandler):
-    def get(self):
-        if users.get_current_user():
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Sign Out'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
-
+        firstname = cgi.escape(self.request.get('firstname'))
+        surname = cgi.escape(self.request.get('surname'))
 
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
+            'ghostnames': ghostnames,
+            'firstname': firstname,
+            'surname': surname
         }
         path = os.path.join(os.path.dirname(__file__), 'results.html')
         self.response.out.write(template.render(path, template_values))

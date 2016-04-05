@@ -30,7 +30,7 @@
             <tr>
                 <td> {{ g.ghostname }} </td>
                 <td> {{ g.creator }}</td>
-                {% if g.taken_by %}
+                {% if g.is_taken %}
                 <td>yes</td>
                 {% else %}
                 <td>no</td>
