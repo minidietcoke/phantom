@@ -2,6 +2,8 @@
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="/static/results.js" ></script>
 </head>
 
 <body>
@@ -25,7 +27,13 @@
             </tr>
             {% for g in ghostnames %}
             <tr>
-                <td> {{ firstname }} "{{ g.ghostname }}" {{ surname}} </td>
+                <td>
+                    <form class= 'form-inline form' action = '/' method='post'>
+                        <input type = "hidden" name = "taken_by" value = {{ firstname }}{{ surname }}></input>
+                        <input type = "hidden" name = "ghostname" value = {{ g.ghostname }}></input>
+                        <a class="ghostnamelink"> {{ firstname }} "{{ g.ghostname }}" {{ surname }} </a>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>

@@ -2,6 +2,7 @@
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/index.css">
 </head>
 
 <body>
@@ -19,7 +20,7 @@
         </div>
     </nav>
     <div class="container">
-        <a class="btn btn-primary btn-lg" href="/getname" role="button">Get Phantom name</a>
+        <a class="btn btn-primary btn-lg" href="/getname" role="button">{{has_chosen}} Phantom name</a>
         <table class="table table-condensed">
             <tr>
                 <th>Ghostname</th>
@@ -27,7 +28,11 @@
                 <th>Taken</th>
             </tr>
             {% for g in ghostnames %}
+            {% if g.is_taken %}
+            <tr class = "taken">
+            {% else %}
             <tr>
+            {% endif %}
                 <td> {{ g.ghostname }} </td>
                 <td> {{ g.creator }}</td>
                 {% if g.is_taken %}
