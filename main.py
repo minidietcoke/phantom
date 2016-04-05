@@ -9,7 +9,11 @@ import webapp2
 
 import os
 from google.appengine.ext.webapp import template
+from oauth2client.client import flow_from_clientsecrets
 
+flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
+                            scope='https://www.googleapis.com/auth/userinfo.email',
+                            redirect_uri='http:localhost:8080')
 
 class Ghostname(db.Model):
 
@@ -26,6 +30,11 @@ class User(db.Model):
 
 
 class MainPage(webapp2.RequestHandler):
+
+    # flow = client.flow_from_clientsecrets(
+    # 'client_secrets.json',
+    # scope='https://www.googleapis.com/auth/drive.metadata.readonly',
+    # redirect_uri='http://www.example.com/oauth2callback')
 
     def get(self):
         if users.get_current_user():
@@ -87,6 +96,7 @@ class Results(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
+
 
         template_values = {
             'url': url,
