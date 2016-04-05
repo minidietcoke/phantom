@@ -15,13 +15,19 @@ flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_s
                             scope='https://www.googleapis.com/auth/userinfo.email',
                             redirect_uri='http:localhost:8080')
 
+# try:
+#     import googleclouddebugger
+#     googleclouddebugger.AttachDebugger()
+# except ImportError:
+#     pass
+
+
 class Ghostname(db.Model):
 
     """Models Ghostname with creator and which user has taken it, if any."""
     ghostname = db.StringProperty(multiline=True)
     creator = db.UserProperty()
     taken_by = db.UserProperty()
-    date = db.DateTimeProperty(auto_now_add=True)
 
 
 class User(db.Model):
@@ -113,7 +119,12 @@ app = webapp2.WSGIApplication([
 
 
 def main():
-    app.RUN()
+    try:
+      import googleclouddebugger
+      googleclouddebugger.AttachDebugger()
+    except ImportError:
+      pass
+        app.RUN()
 
 
 if __name__ == '__main__':
