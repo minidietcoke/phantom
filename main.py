@@ -4,8 +4,8 @@ import datetime
 import urllib
 import wsgiref.handlers
 
-import pdb
-pdb.set_trace()
+# import pdb
+# pdb.set_trace()
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -155,7 +155,7 @@ class MainPage(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
-        # addInitialNames()
+        addInitialNames()
 
         # ghostnames = Ghostname.all()
         ghostnames = db.GqlQuery("SELECT * "
