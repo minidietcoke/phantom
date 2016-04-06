@@ -13,19 +13,12 @@ from google.appengine.ext import db
 
 import jinja2
 import webapp2
-from oauth2client.client import flow_from_clientsecrets
-# from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.file import Storage
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-
-flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
-                    scope='https://www.googleapis.com/auth/userinfo.email',
-                    redirect_uri='http://localhost:8080')
 
 
 class Ghostname(db.Model):
@@ -141,18 +134,15 @@ def addInitialNames():
 class Main_page(webapp2.RequestHandler):
 
     def get(self):
-        global flow
-        if self.request.method == 'GET' and 'code' in self.request.GET:
-            credentials = flow.step2_exchange(self.request.get('code'))
-            storage = Storage('a_credentials_file')
-            storage.put(credentials)
+        if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = flow.step1_get_authorize_url()
+            url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
         addInitialNames()
+
         ghostnames = db.GqlQuery("SELECT * "
                                  "FROM Ghostname "
                                  "WHERE ANCESTOR IS :1 "
@@ -170,13 +160,11 @@ class Main_page(webapp2.RequestHandler):
 
 
     def post(self):
-        global flow
-        if self.request.method == 'GET' and 'code' in self.request.GET:
-            credentials = flow.step2_exchange(self.request.get('code'))
+        if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = flow.step1_get_authorize_url()
+            url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
         taken_by = cgi.escape(self.request.get('taken_by'))
@@ -221,13 +209,11 @@ class Main_page(webapp2.RequestHandler):
 class Get_name(webapp2.RequestHandler):
 
     def get(self):
-        global flow
-        if self.request.method == 'GET' and 'code' in self.request.GET:
-            credentials = flow.step2_exchange(self.request.get('code'))
+        if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = flow.step1_get_authorize_url()
+            url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
         template_values = {
@@ -242,13 +228,11 @@ class Get_name(webapp2.RequestHandler):
 class Results(webapp2.RequestHandler):
 
     def post(self):
-        global flow
-        if self.request.method == 'GET' and 'code' in self.request.GET:
-            credentials = flow.step2_exchange(self.request.get('code'))
+        if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = flow.step1_get_authorize_url()
+            url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
         ghostnames = Ghostname.all().filter("is_taken =", False).run(limit=3)
@@ -266,11 +250,10 @@ class Results(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-
 app = webapp2.WSGIApplication([
     ('/', Main_page),
     ('/getname', Get_name),
-    ('/results', Results)
+    ('/results', Results),
 ], debug=True)
 
 
