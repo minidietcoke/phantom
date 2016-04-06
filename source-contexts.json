@@ -1,13 +1,1 @@
-[
-  {
-    "context": {
-      "git": {
-        "revisionId": "10a77da7de03a6c44c75f587f819447335ae90f2", 
-        "url": "git@github.com:minidietcoke/phantom.git"
-      }
-    }, 
-    "labels": {
-      "category": "remote_repo"
-    }
-  }
-]
+[{"labels": {"category": "remote_repo"}, "context": {"git": {"url": "git@github.com:minidietcoke/phantom.git", "revisionId": "ea351ae90e3b4ec5e3eda04a5987305e638d7732"}}}, {"labels": {"category": "capture"}, "context": {"cloudWorkspace": {"workspaceId": {"name": "55641D9267C201552C30A14DFE5B51CF2DF6DA7F", "repoId": {"projectRepoId": {"projectId": "phantom-mary-lin-project", "repoName": "google-source-captures"}}}}}}]

@@ -9,12 +9,12 @@
         <div class="container-fluid navbar-right">
             <div class="navbar-header">
                 <p class="navbar-text"><a href="{{ url }}">
-                {% if url_linktext == "Sign Out" %} 
+                {% if url_link_text == "Sign Out" %} 
                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                 {% else %}
                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                 {% endif %}
-                {{ url_linktext }}</a></p>
+                {{ url_link_text }}</a></p>
             </div>
         </div>
     </nav>
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <input type="text" class="form-control" name="surname" placeholder="Surname">
             </div>
-            <button type="submit" class="btn btn-default">Get Phantom Name</button>
+            <button type="submit" class="btn btn-default">Choose Phantom name</button>
         </form>
     </div>
 </body>

@@ -16,7 +16,7 @@
                 {% else %}
                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                 {% endif %}
-                {{ url_linktext }}</a></p>
+                {{ url_link_text }}</a></p>
             </div>
         </div>
     </nav>
@@ -29,8 +29,8 @@
             <tr>
                 <td>
                     <form class= 'form-inline form' action = '/' method='post'>
-                        <input type = "hidden" name = "taken_by" value = {{ firstname }}{{ surname }}></input>
-                        <input type = "hidden" name = "ghostname" value = {{ g.ghostname }}></input>
+                        <input type = "hidden" name = "taken_by" value = "{{ firstname }}{{ surname }} "></input>
+                        <input type = "hidden" name = "ghostname" value = "{{ g.ghostname }}"></input>
                         <a class="ghostnamelink"> {{ firstname }} "{{ g.ghostname }}" {{ surname }} </a>
                     </form>
                 </td>
