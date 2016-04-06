@@ -3,6 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="/static/getname.js"></script>
 </head>
 
 <body>
@@ -22,6 +24,7 @@
         </div>
     </nav>
     <div class="container">
+        <div class="alert alert-warning" role="alert" id="entryerror">Incorrect name format, please make sure there are no special characters</div>
         <form class="form-inline" action="/results" method="post">
             <div class="form-group">
                 <input type="text" class="form-control" name="firstname" placeholder="First name">
@@ -29,7 +32,7 @@
             <div class="form-group">
                 <input type="text" class="form-control" name="surname" placeholder="Surname">
             </div>
-            <button type="submit" class="btn btn-default">Choose Phantom name</button>
+            <button type="submit" class="btn btn-default" id="submitbutton">Choose Phantom name</button>
         </form>
     </div>
 </body>
