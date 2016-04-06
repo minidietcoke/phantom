@@ -1,29 +1,27 @@
 # -*- coding: utf-8 -*-
 import cgi
-import datetime
-import urllib
-import wsgiref.handlers
+# import datetime
+# import urllib
+# import wsgiref.handlers
 
 # import pdb
 # pdb.set_trace()
 
-from google.appengine.ext import db
+import os
 from google.appengine.api import users
+from google.appengine.ext import db
+
+import jinja2
 import webapp2
 
-import os
-from google.appengine.ext.webapp import template
+
+# from google.appengine.ext.webapp import template
 # from oauth2client.client import flow_from_clientsecrets
 
-# flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
-#                             scope='https://www.googleapis.com/auth/userinfo.email',
-#                             redirect_uri='http:localhost:8080')
-
-# try:
-#     import googleclouddebugger
-#     googleclouddebugger.AttachDebugger()
-# except ImportError:
-#     pass
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
 
 
 class Ghostname(db.Model):
@@ -148,6 +146,9 @@ class MainPage(webapp2.RequestHandler):
     # redirect_uri='http://www.example.com/oauth2callback')
 
     def get(self):
+        # flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
+        #                     scope='https://www.googleapis.com/auth/userinfo.email',
+        #                     redirect_uri='http://localhost:8080')
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
@@ -170,8 +171,11 @@ class MainPage(webapp2.RequestHandler):
             'get_name_link_text': 'Get a Phantom name'
         }
 
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, template_values))
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render(template_values))
+
+        # path = os.path.join(os.path.dirname(__file__), 'index.html')
+        # self.response.out.write(template.render(path, template_values))
 
     def post(self):
         if users.get_current_user():
@@ -216,8 +220,11 @@ class MainPage(webapp2.RequestHandler):
             'get_name_link_text': 'Change your current Phantom name'
         }
 
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, template_values))
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render(template_values))
+
+        # path = os.path.join(os.path.dirname(__file__), 'index.html')
+        # self.response.out.write(template.render(path, template_values))
 
 
 class Get_name(webapp2.RequestHandler):
@@ -234,8 +241,11 @@ class Get_name(webapp2.RequestHandler):
             'url': url,
             'url_link_text': url_link_text,
         }
-        path = os.path.join(os.path.dirname(__file__), 'getname.html')
-        self.response.out.write(template.render(path, template_values))
+
+        template = JINJA_ENVIRONMENT.get_template('getname.html')
+        self.response.write(template.render(template_values))
+        # path = os.path.join(os.path.dirname(__file__), 'getname.html')
+        # self.response.out.write(template.render(path, template_values))
 
 
 class Results(webapp2.RequestHandler):
@@ -259,8 +269,10 @@ class Results(webapp2.RequestHandler):
             'firstname': firstname,
             'surname': surname,
         }
-        path = os.path.join(os.path.dirname(__file__), 'results.html')
-        self.response.out.write(template.render(path, template_values))
+        template = JINJA_ENVIRONMENT.get_template('results.html')
+        self.response.write(template.render(template_values))
+        # path = os.path.join(os.path.dirname(__file__), 'results.html')
+        # self.response.out.write(template.render(path, template_values))
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
