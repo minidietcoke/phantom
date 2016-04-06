@@ -13,15 +13,19 @@ from google.appengine.ext import db
 
 import jinja2
 import webapp2
+from oauth2client.client import flow_from_clientsecrets
+# from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.file import Storage
 
-
-# from google.appengine.ext.webapp import template
-# from oauth2client.client import flow_from_clientsecrets
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
+flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
+                    scope='https://www.googleapis.com/auth/userinfo.email',
+                    redirect_uri='http://localhost:8080')
 
 
 class Ghostname(db.Model):
@@ -38,132 +42,122 @@ class User(db.Model):
     is_admin = db.BooleanProperty()
 
 
-# def ghostnameparent_key():
-#     return db.Key.from_path('Ghostname', 'default_ghostnametable')
-
-
-def ghostname_key():
+def ghostname_parent_key():
     return db.Key.from_path('Ghostname', 'default_ghostnametable')
 
 
 def addInitialNames():
-    g1 = Ghostname(parent=ghostname_key(),
+    g1 = Ghostname(parent=ghostname_parent_key(),
                    creator='Default', ghostname='Betel geuse')
     g2 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Bhoot')
-    g3 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Bhoot')
+    g3 = Ghostname(parent=ghostname_parent_key(),
                    creator='Default', ghostname='Bloody Mary')
     g4 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Bogle')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Bogle')
     g5 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Casper')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Casper')
     g6 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Chindi')
-    g7 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Chindi')
+    g7 = Ghostname(parent=ghostname_parent_key(),
                    creator='Default', ghostname='Cihuateteo')
-    g8 = Ghostname(parent=ghostname_key(),
+    g8 = Ghostname(parent=ghostname_parent_key(),
                    creator='Default', ghostname='Clytemnestra')
     g9 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Draugr')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Draugr')
     g10 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Dybbuk')
-    g11 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Dybbuk')
+    g11 = Ghostname(parent=ghostname_parent_key(),
                     key_name='Gjenganger', creator='Default', ghostname='Gjenganger')
     g12 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname=u'Guĭ')
+        parent=ghostname_parent_key(), creator='Default', ghostname=u'Guĭ')
     g13 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Ibbur')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Ibbur')
     g14 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Jima')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Jima')
     g15 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Jinn')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Jinn')
     g16 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='La Llorona')
-    g17 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='La Llorona')
+    g17 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname="Moaning Myrtle")
-    g18 = Ghostname(parent=ghostname_key(),
+    g18 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Mr. Boogedy')
-    g19 = Ghostname(parent=ghostname_key(),
+    g19 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Nachzehrer')
     g20 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Blinky')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Blinky')
     g21 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Pinky')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Pinky')
     g22 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Inky')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Inky')
     g23 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Clyde')
-    g24 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Clyde')
+    g24 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Patrick Swayze')
-    g25 = Ghostname(parent=ghostname_key(),
+    g25 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Phi Tai Hong')
-    g26 = Ghostname(parent=ghostname_key(),
+    g26 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Pishacha')
-    g27 = Ghostname(parent=ghostname_key(),
+    g27 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Poltergeist')
-    g28 = Ghostname(parent=ghostname_key(),
+    g28 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Revenant')
-    g29 = Ghostname(parent=ghostname_key(),
+    g29 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Ringwraith')
-    g30 = Ghostname(parent=ghostname_key(),
+    g30 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Slender Man')
     g31 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Slimer')
-    g32 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Slimer')
+    g32 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Space Ghost')
     g33 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Strigoi')
-    g34 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Strigoi')
+    g34 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Candyman')
-    g35 = Ghostname(parent=ghostname_key(),
+    g35 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='The Crypt Keeper')
-    g36 = Ghostname(parent=ghostname_key(),
+    g36 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Headless Horseman')
     g37 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname=u'Tomás')
+        parent=ghostname_parent_key(), creator='Default', ghostname=u'Tomás')
     g38 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Vetala')
-    g39 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname='Vetala')
+    g39 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname=u'Wiedergänger')
-    g40 = Ghostname(parent=ghostname_key(),
+    g40 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Xunantunich')
     g41 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname=u'Yūrei')
-    g42 = Ghostname(parent=ghostname_key(),
+        parent=ghostname_parent_key(), creator='Default', ghostname=u'Yūrei')
+    g42 = Ghostname(parent=ghostname_parent_key(),
                     creator='Default', ghostname='Zhong Kui')
     g43 = Ghostname(
-        parent=ghostname_key(), creator='Default', ghostname='Zuul')
+        parent=ghostname_parent_key(), creator='Default', ghostname='Zuul')
 
     db.put([g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15, g16, g17, g18, g19, g20, g21, g22,
             g23, g24, g25, g26, g27, g28, g29, g30, g31, g32, g33, g34, g35, g36, g37, g38, g39, g40, g41, g42, g43])
 
 
-class MainPage(webapp2.RequestHandler):
-
-    # flow = client.flow_from_clientsecrets(
-    # 'client_secrets.json',
-    # scope='https://www.googleapis.com/auth/drive.metadata.readonly',
-    # redirect_uri='http://www.example.com/oauth2callback')
+class Main_page(webapp2.RequestHandler):
 
     def get(self):
-        # flow = flow_from_clientsecrets(os.path.join(os.path.dirname(__file__), 'client_secrets.json'),
-        #                     scope='https://www.googleapis.com/auth/userinfo.email',
-        #                     redirect_uri='http://localhost:8080')
-        if users.get_current_user():
+        global flow
+        if self.request.method == 'GET' and 'code' in self.request.GET:
+            credentials = flow.step2_exchange(self.request.get('code'))
+            storage = Storage('a_credentials_file')
+            storage.put(credentials)
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = users.create_login_url(self.request.uri)
+            url = flow.step1_get_authorize_url()
             url_link_text = 'Login'
 
         addInitialNames()
-
-        # ghostnames = Ghostname.all()
         ghostnames = db.GqlQuery("SELECT * "
                                  "FROM Ghostname "
                                  "WHERE ANCESTOR IS :1 "
                                  "ORDER BY ghostname ASC",
-                                 ghostname_key())
+                                 ghostname_parent_key())
         template_values = {
             'ghostnames': ghostnames,
             'url': url,
@@ -174,15 +168,15 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
-        # path = os.path.join(os.path.dirname(__file__), 'index.html')
-        # self.response.out.write(template.render(path, template_values))
 
     def post(self):
-        if users.get_current_user():
+        global flow
+        if self.request.method == 'GET' and 'code' in self.request.GET:
+            credentials = flow.step2_exchange(self.request.get('code'))
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = users.create_login_url(self.request.uri)
+            url = flow.step1_get_authorize_url()
             url_link_text = 'Login'
 
         taken_by = cgi.escape(self.request.get('taken_by'))
@@ -201,7 +195,7 @@ class MainPage(webapp2.RequestHandler):
                                  "FROM Ghostname "
                                  "WHERE ANCESTOR IS :1 "
                                  "AND ghostname = :2",
-                                 ghostname_key(),
+                                 ghostname_parent_key(),
                                  ghostname).get()
         ghostnames = Ghostname.all()
         dbghostnameentity.is_taken = True
@@ -212,7 +206,7 @@ class MainPage(webapp2.RequestHandler):
                                  "FROM Ghostname "
                                  "WHERE ANCESTOR IS :1 "
                                  "ORDER BY ghostname ASC",
-                                 ghostname_key())
+                                 ghostname_parent_key())
         template_values = {
             'ghostnames': ghostnames,
             'url': url,
@@ -223,18 +217,17 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
-        # path = os.path.join(os.path.dirname(__file__), 'index.html')
-        # self.response.out.write(template.render(path, template_values))
-
 
 class Get_name(webapp2.RequestHandler):
 
     def get(self):
-        if users.get_current_user():
+        global flow
+        if self.request.method == 'GET' and 'code' in self.request.GET:
+            credentials = flow.step2_exchange(self.request.get('code'))
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = users.create_login_url(self.request.uri)
+            url = flow.step1_get_authorize_url()
             url_link_text = 'Login'
 
         template_values = {
@@ -244,18 +237,18 @@ class Get_name(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('getname.html')
         self.response.write(template.render(template_values))
-        # path = os.path.join(os.path.dirname(__file__), 'getname.html')
-        # self.response.out.write(template.render(path, template_values))
 
 
 class Results(webapp2.RequestHandler):
 
     def post(self):
-        if users.get_current_user():
+        global flow
+        if self.request.method == 'GET' and 'code' in self.request.GET:
+            credentials = flow.step2_exchange(self.request.get('code'))
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
         else:
-            url = users.create_login_url(self.request.uri)
+            url = flow.step1_get_authorize_url()
             url_link_text = 'Login'
 
         ghostnames = Ghostname.all().filter("is_taken =", False).run(limit=3)
@@ -271,11 +264,11 @@ class Results(webapp2.RequestHandler):
         }
         template = JINJA_ENVIRONMENT.get_template('results.html')
         self.response.write(template.render(template_values))
-        # path = os.path.join(os.path.dirname(__file__), 'results.html')
-        # self.response.out.write(template.render(path, template_values))
+
+
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', Main_page),
     ('/getname', Get_name),
     ('/results', Results)
 ], debug=True)

@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+{% autoescape true %}
 <html>
 
 <head>
@@ -10,7 +12,7 @@
         <div class="container-fluid navbar-right">
             <div class="navbar-header">
                 <p class="navbar-text"><a href="{{ url }}">
-                {% if url_linktext == "Sign Out" %} 
+                {% if url_link_text == "Sign Out" %} 
                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                 {% else %}
                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
@@ -47,3 +49,4 @@
 </body>
 
 </html>
+{% endautoescape %}
