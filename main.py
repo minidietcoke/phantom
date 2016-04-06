@@ -15,6 +15,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
+addedNames = 0
+
 
 class Ghostname(db.Model):
 
@@ -140,7 +142,10 @@ class Main_page(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
-        addInitialNames()
+        global addedNames
+        if addedNames == 0:
+            addInitialNames()
+            addedNames = 1
 
         ghostnames = db.GqlQuery("SELECT * "
                                  "FROM Ghostname "
@@ -270,6 +275,10 @@ class Results(webapp2.RequestHandler):
 class Admin(webapp2.RequestHandler):
 
     def get(self):
+        global addedNames
+        if addedNames == 0:
+            addInitialNames()
+            addedNames = 1
         current_user = users.get_current_user()
         adminurl = users.create_login_url(self.request.uri)
         if current_user:
