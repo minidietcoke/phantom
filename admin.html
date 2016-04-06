@@ -1,0 +1,62 @@
+<!DOCTYPE html> {% autoescape true %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="/static/admin.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid navbar-right">
+            <div class="navbar-header">
+                <p class="navbar-text"><a href="{{ url }}">
+                {% if url_linktext == "Sign Out" %} 
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                {% endif %}
+                {{ url_link_text }}</a></p>
+                {% if adminurl == "/admin" %}
+                <p class="navbar-text"><a href="{{ adminurl }}">Admin</a></p>
+                {% endif %} </div>
+        </div>
+    </nav>
+    <input type="hidden" id="username" value="{{ current_user }}">
+    <div class="container">
+        <a class="btn btn-primary" role="button" id="addNewRow">Add new Ghostname</a>
+        <table class="table table-condensed">
+            <tr id="ghostnamestable">
+                <th>Ghostname</th>
+                <th>Created By</th>
+                <th>Taken</th>
+                <th>Delete</th>
+            </tr>
+            {% for g in ghostnames %} {% if g.is_taken %}
+            <tr class="taken">
+                {% else %}
+                <tr>
+                    {% endif %}
+                    <td>
+                        <form class='form-inline form' action='/save' method='post'>
+                            <input type="hidden" name="oldghostname" value="{{ g.ghostname }}"></input>
+                            <input type="text" name="newghostname" readonly value="{{ g.ghostname }}"> <a class="editbutton">Edit</a> </td>
+                        </form>
+                    <td> {{ g.creator }}</td>
+                    {% if g.is_taken %}
+                    <td>yes</td>
+                    {% else %}
+                    <td>no</td>
+                    {% endif %}
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
+{% endautoescape %}

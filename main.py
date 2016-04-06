@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
+# import pdb
+# pdb.set_trace()
 import cgi
 # import datetime
 # import urllib
 # import wsgiref.handlers
-
-# import pdb
-# pdb.set_trace()
 
 import os
 from google.appengine.api import users
@@ -134,9 +133,12 @@ def addInitialNames():
 class Main_page(webapp2.RequestHandler):
 
     def get(self):
+        adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
+            if users.is_current_user_admin():
+                adminurl = '/admin'
         else:
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
@@ -152,7 +154,8 @@ class Main_page(webapp2.RequestHandler):
             'ghostnames': ghostnames,
             'url': url,
             'url_link_text': url_link_text,
-            'get_name_link_text': 'Get a Phantom name'
+            'get_name_link_text': 'Get a Phantom name',
+            'adminurl': adminurl
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -160,9 +163,12 @@ class Main_page(webapp2.RequestHandler):
 
 
     def post(self):
+        adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
+            if users.is_current_user_admin():
+                adminurl = '/admin'
         else:
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
@@ -178,7 +184,7 @@ class Main_page(webapp2.RequestHandler):
             dbprevghostname.taken_by = None
             dbprevghostname.put()
 
-        ghostname = self.request.get('ghostname').decode('utf-8')
+        ghostname = cgi.escape(self.request.get('ghostname'))
         dbghostnameentity = db.GqlQuery("SELECT * "
                                  "FROM Ghostname "
                                  "WHERE ANCESTOR IS :1 "
@@ -199,7 +205,8 @@ class Main_page(webapp2.RequestHandler):
             'ghostnames': ghostnames,
             'url': url,
             'url_link_text': url_link_text,
-            'get_name_link_text': 'Change your current Phantom name'
+            'get_name_link_text': 'Change your current Phantom name',
+            'adminurl': adminurl
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -209,9 +216,12 @@ class Main_page(webapp2.RequestHandler):
 class Get_name(webapp2.RequestHandler):
 
     def get(self):
+        adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
+            if users.is_current_user_admin():
+                adminurl = '/admin'
         else:
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
@@ -228,9 +238,12 @@ class Get_name(webapp2.RequestHandler):
 class Results(webapp2.RequestHandler):
 
     def post(self):
+        adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
             url = users.create_logout_url(self.request.uri)
             url_link_text = 'Sign Out'
+            if users.is_current_user_admin():
+                adminurl = '/admin'
         else:
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
@@ -245,15 +258,71 @@ class Results(webapp2.RequestHandler):
             'ghostnames': ghostnames,
             'firstname': firstname,
             'surname': surname,
+            'adminurl': adminurl
         }
         template = JINJA_ENVIRONMENT.get_template('results.html')
         self.response.write(template.render(template_values))
 
 
+class Admin(webapp2.RequestHandler):
+    def get(self):
+        adminurl = users.create_login_url(self.request.uri)
+        if users.get_current_user():
+            url = users.create_logout_url(self.request.uri)
+            url_link_text = 'Sign Out'
+            if users.is_current_user_admin():
+                adminurl = '/admin'
+            else:
+                self.redirect(adminurl)
+        else:
+            url = users.create_login_url(self.request.uri)
+            url_link_text = 'Sign in'
+            self.redirect(url)
+
+        ghostnames = db.GqlQuery("SELECT * "
+                                 "FROM Ghostname "
+                                 "WHERE ANCESTOR IS :1 "
+                                 "ORDER BY ghostname ASC",
+                                 ghostname_parent_key())
+        template_values = {
+            'ghostnames': ghostnames,
+            'url': url,
+            'url_link_text': url_link_text,
+            'get_name_link_text': 'Get a Phantom name',
+            'adminurl': adminurl,
+            'current_user': users.get_current_user().nickname()
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('admin.html')
+        self.response.write(template.render(template_values))
+
+
+class Save(webapp2.RequestHandler):
+    def post(self):
+        oldghostname = self.request.get('oldghostname')
+        newname = self.request.get('newghostname')
+
+        if oldghostname == '':
+            newghost = Ghostname(parent=ghostname_parent_key(),
+                   creator=users.get_current_user().nickname(), ghostname=newname)
+            newghost.put()
+        else:
+            dbghostnameentity = db.GqlQuery("SELECT * "
+                                     "FROM Ghostname "
+                                     "WHERE ANCESTOR IS :1 "
+                                     "AND ghostname = :2",
+                                     ghostname_parent_key(),
+                                     oldghostname).get()
+            dbghostnameentity.ghostname = newname
+            dbghostnameentity.put()
+        self.redirect('/admin')
+
 app = webapp2.WSGIApplication([
     ('/', Main_page),
     ('/getname', Get_name),
     ('/results', Results),
+    ('/admin', Admin),
+    ('/save', Save)
 ], debug=True)
 
 

@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-{% autoescape true %}
+<!DOCTYPE html> {% autoescape true %}
 <html>
+
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
@@ -16,11 +16,12 @@
                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                 {% endif %}
                 {{ url_link_text }}</a></p>
-            </div>
+                {% if adminurl == "/admin" %}
+                <p class="navbar-text"><a href="{{ adminurl }}">Admin</a></p>
+                {% endif %} </div>
         </div>
     </nav>
     <div class="container">
-
         <form class="form-inline" action="/results" method="post">
             <div class="form-group">
                 <input type="text" class="form-control" name="firstname" placeholder="First name">
