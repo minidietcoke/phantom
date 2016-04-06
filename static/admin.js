@@ -9,15 +9,7 @@ $(document).on('click', '#addNewRow', function() {
 });
 
 $(document).on('click', '.editbutton', function() {
-    console.log($(this).text());
     if ($(this).text() === 'Save') {
-        // var parameters = {
-        //     oldghostname: $('[name="oldghostname"]'),
-        //     newghostname: $('[name="newghostname"]')
-        // };
-        // $.post('/save', parameters, function(data) {
-        //     console.log("worked?");
-        // });
         $(this).parents('form:first').submit();
     }
     $(this)
@@ -29,4 +21,8 @@ $(document).on('click', '.editbutton', function() {
         .prop('readonly', function(i, r) {
             return !r;
         });
+});
+
+$(document).on('click', '.deletebutton', function() {
+    $(this).parents('form:first').submit();
 });
