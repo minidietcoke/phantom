@@ -172,7 +172,7 @@ class Main_page(webapp2.RequestHandler):
     def post(self):
         adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
-            url = users.create_logout_url(self.request.uri)
+            url = users.create_logout_url('/')
             url_link_text = 'Sign Out'
             if users.is_current_user_admin():
                 adminurl = '/admin'
@@ -246,6 +246,7 @@ class Get_name(webapp2.RequestHandler):
 class Results(webapp2.RequestHandler):
     def get(self):
         self.redirect('/getname')
+
     def post(self):
         adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
@@ -284,7 +285,7 @@ class Admin(webapp2.RequestHandler):
         current_user = users.get_current_user()
         adminurl = users.create_login_url(self.request.uri)
         if current_user:
-            url = users.create_logout_url(self.request.uri)
+            url = users.create_logout_url('/')
             url_link_text = 'Sign Out'
             current_user = users.get_current_user().nickname()
             if users.is_current_user_admin():
