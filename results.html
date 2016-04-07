@@ -27,9 +27,10 @@
         <table class="table table-condensed">
             <tr>
                 <th>Choose a Phantom name</th>
+                <th id="#shuffle">refresh page or click here <span class="glyphicon glyphicon-refresh"></span> to see other options</th>
             </tr>
             {% for g in ghostnames %}
-            <tr>
+            <tr class="row_ghostname">
                 <td>
                     <form class='form-inline form' action='/' method='post'>
                         <input type="hidden" name="taken_by" value="{{ firstname }}{{ surname }} "></input>
@@ -37,6 +38,7 @@
                         <a class="ghostnamelink"> {{ firstname }} "{{ g.ghostname }}" {{ surname }} </a>
                     </form>
                 </td>
+                <td></td>
             </tr>
             {% endfor %}
         </table>

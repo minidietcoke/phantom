@@ -256,7 +256,8 @@ class Results(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
-        ghostnames = Ghostname.all().filter("is_taken =", False).run(limit=3)
+        ghostnames = Ghostname.all().filter("is_taken =", False).order('ghostname')
+        # .run(limit=3)
         firstname = cgi.escape(self.request.get('firstname'))
         surname = cgi.escape(self.request.get('surname'))
 
