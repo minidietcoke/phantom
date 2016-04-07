@@ -244,7 +244,8 @@ class Get_name(webapp2.RequestHandler):
 
 
 class Results(webapp2.RequestHandler):
-
+    def get(self):
+        self.redirect('/getname')
     def post(self):
         adminurl = users.create_login_url(self.request.uri)
         if users.get_current_user():
