@@ -244,6 +244,7 @@ class Get_name(webapp2.RequestHandler):
 
 
 class Results(webapp2.RequestHandler):
+
     def get(self):
         self.redirect('/getname')
 
@@ -258,7 +259,8 @@ class Results(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_link_text = 'Login'
 
-        ghostnames = Ghostname.all().filter("is_taken =", False).order('ghostname')
+        ghostnames = Ghostname.all().filter(
+            "is_taken =", False).order('ghostname')
         # .run(limit=3)
         firstname = cgi.escape(self.request.get('firstname'))
         surname = cgi.escape(self.request.get('surname'))
@@ -321,21 +323,28 @@ class Save(webapp2.RequestHandler):
         oldghostname = self.request.get('oldghostname')
         newname = self.request.get('newghostname')
 
-        if oldghostname == '':
-            newghost = Ghostname(parent=ghostname_parent_key(),
-                                 creator=users.get_current_user().nickname(), ghostname=newname, last_altered_by=users.get_current_user().nickname())
-            newghost.put()
-        else:
-            dbghostnameentity = db.GqlQuery("SELECT * "
-                                            "FROM Ghostname "
-                                            "WHERE ANCESTOR IS :1 "
-                                            "AND ghostname = :2",
-                                            ghostname_parent_key(),
-                                            oldghostname).get()
-            dbghostnameentity.ghostname = newname
-            dbghostnameentity.last_altered_by = users.get_current_user(
-            ).nickname()
-            dbghostnameentity.put()
+        dbghostnameentitynumber = db.GqlQuery("SELECT * "
+                                              "FROM Ghostname "
+                                              "WHERE ANCESTOR IS :1 "
+                                              "AND ghostname = :2",
+                                              ghostname_parent_key(),
+                                              newname).count()
+        if dbghostnameentitynumber == 0:
+            if oldghostname == '':
+                newghost = Ghostname(parent=ghostname_parent_key(),
+                                     creator=users.get_current_user().nickname(), ghostname=newname, last_altered_by=users.get_current_user().nickname())
+                newghost.put()
+            else:
+                dbghostnameentity = db.GqlQuery("SELECT * "
+                                                "FROM Ghostname "
+                                                "WHERE ANCESTOR IS :1 "
+                                                "AND ghostname = :2",
+                                                ghostname_parent_key(),
+                                                oldghostname).get()
+                dbghostnameentity.ghostname = newname
+                dbghostnameentity.last_altered_by = users.get_current_user(
+                ).nickname()
+                dbghostnameentity.put()
         self.redirect('/admin')
 
 
